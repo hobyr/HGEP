@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/FantasticEngine.dir/src/main.cpp.o CMakeFiles/FantasticEngine.dir/src/shader.cpp.o  -o FantasticEngine  Dependencies/GLFW/src/libglfw3.a Dependencies/GLAD/libglad.a -lpthread /usr/lib/x86_64-linux-gnu/librt.so -lm -ldl 
