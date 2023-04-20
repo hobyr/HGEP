@@ -20,13 +20,13 @@ add_subdirectory(Dependencies/GLFW)
 add_subdirectory(Dependencies/GLAD)
 
 # copy files for execution
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shader.frag DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shader.vert DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shader.frag DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/shader.vert DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # add the executable
 add_executable(FantasticEngine 
     src/main.cpp
-    src/shader.cpp
+    #    src/shader.cpp
     )
 
 # link libraries to executable

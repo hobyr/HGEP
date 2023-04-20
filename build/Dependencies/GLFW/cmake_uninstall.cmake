@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "/home/hobyr/Documents/CODING/999-PROJECTS/GameEngine/build/Dependencies/GLFW/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"/home/hobyr/Documents/CODING/999-PROJECTS/GameEngine/build/Dependencies/GLFW/install_manifest.txt\"")
+if (NOT EXISTS "/home/hobyr/Documents/CODING/999-PROJECTS/Github_repos/Game_Engine/build/Dependencies/GLFW/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: \"/home/hobyr/Documents/CODING/999-PROJECTS/Github_repos/Game_Engine/build/Dependencies/GLFW/install_manifest.txt\"")
 endif()
 
-file(READ "/home/hobyr/Documents/CODING/999-PROJECTS/GameEngine/build/Dependencies/GLFW/install_manifest.txt" files)
+file(READ "/home/hobyr/Documents/CODING/999-PROJECTS/Github_repos/Game_Engine/build/Dependencies/GLFW/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

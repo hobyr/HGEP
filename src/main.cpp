@@ -1,118 +1,92 @@
-#include <cstdio>
+/* Created on 04/19/2023 22:02:20
+ * main.cpp
+ * Author: Hoby Ratefimandimby
+ *
+ */
+
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-#include "shader.h"
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
 
 int main(int argc, char *argv[])
-{ if (!glfwInit())
-    {
-        // Initialization failed
-        exit(EXIT_FAILURE);
-    }
+{
+  std::cout << "Hello world!" << std::endl;
 
-    GLFWwindow* window = glfwCreateWindow(800, 800, "OpenGL Practice", NULL, NULL);
-    if (!window)
-    {
-        // Window or OpenGL context creation failed std::cout << "Error creating window!" << std::endl;
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    glfwMakeContextCurrent(window);
-    int version = gladLoadGL(glfwGetProcAddress);
-    if (version == 0) 
-    {
-        std::cerr << "Failed to initialize OpenGL context" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+  // Initialize GLFW
+  glfwInit();
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);;
 
-//    // Successfully loaded OpenGL?
-//    std::cout << "Loaded OpenGL " << GLAD_VERSION_MAJOR(version)
-//              << "." << GLAD_VERSION_MINOR(version) << std::endl;
-//
-//    // Max number of vertex attributes
-//    GLint nrAttributes;
-//    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-//    std::cout << "Max. no. of vertex attributes: " << nrAttributes << std::endl;
-
-    //------------------------------
-    //          OpenGL section
-    //------------------------------
-    //------------------------------
-    //       Shaders & Program
-    //------------------------------
-    Shader shaderProgram("./shader.vert", "./shader.frag");
-
-    //------------------------------
-    //      Vertices & Buffers
-    //------------------------------
-    // Create vertices
-    const float firstTriangle[] = {
-       -0.5f, -0.433f, 0.0f, 1.0f, 
-        1.0f,  0.0f, 0.0f, 1.0f,
-        0.5f, -0.433f, 0.0f, 1.0f,  
-        0.0f,  1.0f, 0.0f, 1.0f,
-        0.0f,  0.433f, 0.0f, 1.0f,  
-        0.0f,  0.0f, 1.0f, 1.0f,
-    };
-
-    GLuint VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
-    // position attribute
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(4 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-
-    //--------------------------------------
-    //              Main Loop
-    //--------------------------------------
-    while (!glfwWindowShouldClose(window)) 
-    {
-        glfwPollEvents();
-
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //--------------------------------------
-        //      Uniforms
-        //--------------------------------------
-        shaderProgram.use();
-#if 1
-        double timeValue = glfwGetTime();
-        double redValue    = std::sin(timeValue + 3.14159f);
-        double greenValue  = std::cos(timeValue + 3.14159f);
-        double blueValue   = std::sin(timeValue + 3.14159f);
-        double x = std::sin(timeValue + 3.14159f);
-        double y = std::cos(timeValue + 3.14159f);
-//        GLint vertexColorLocation = glGetUniformLocation(shaderProgram.ID, "ourColor");
-        GLint vertexPosLocation = glGetUniformLocation(shaderProgram.ID, "posOffset");
-//        glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0f);
-        glUniform4f(vertexPosLocation, x, 0.0f, 0.0f, 1.0f);
-#endif
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        glfwSwapBuffers(window);
-    }
-
-    glfwDestroyWindow(window);
-
+  // Create an application window where we can draw
+  GLFWwindow* window = glfwCreateWindow(800, 600, "My new OpenGL Window", NULL, NULL);
+  if (window == NULL) {
+    std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
-    exit(EXIT_SUCCESS);
+    return -1;
+  }
+  // Create an OpenGL context
+  glfwMakeContextCurrent(window);
 
-    return 0;
+  // Initialize GLAD to make OpenGL functions available to use
+  if (!gladLoadGL(glfwGetProcAddress)) {
+    std::cout << "Failed to initialize GLAD" << std::endl;
+    return -1;
+  }
+
+  // Set viewport to proper window size
+  glViewport(0, 0, 800, 600);
+
+
+  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  // render loop
+  while(!glfwWindowShouldClose(window)) {
+
+    // input
+    processInput(window);
+
+
+    // Rendering commands here
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // check and call events and swap the buffers => no flickering between frames
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+    // When window is resized, resize viewport accordingly
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  }
+
+  glfwTerminate();
+  return 0;
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+  glViewport(0, 0, width, height);
+}
+
+
+void processInput(GLFWwindow* window) {
+  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  } else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+    GLfloat bkColor[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, bkColor);
+    glClearColor(0.2f, bkColor[1]+0.1f, 0.3f, 1.0f);
+  } else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+    GLfloat bkColor[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, bkColor);
+    glClearColor(0.2f, bkColor[1]-0.1f, 0.3f, 1.0f);
+  }else if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+    GLfloat bkColor[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, bkColor);
+    glClearColor(0.2f, 0.3f, bkColor[2]+0.1f, 1.0f);
+  } else if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+    GLfloat bkColor[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, bkColor);
+    glClearColor(0.2f, 0.3f, bkColor[2]-0.1f, 1.0f);
+  }
+
 }

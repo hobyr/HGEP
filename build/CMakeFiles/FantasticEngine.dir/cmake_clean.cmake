@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/FantasticEngine.dir/src/main.cpp.o"
-  "CMakeFiles/FantasticEngine.dir/src/shader.cpp.o"
+  "CMakeFiles/FantasticEngine.dir/src/main.cpp.o.d"
   "FantasticEngine"
   "FantasticEngine.pdb"
 )
